@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="claro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#4f46e5">
+<meta name="description" content="Hemeroteca de la I.E. SAN JOSÉ DE PUNO: biblioteca digital para docentes y estudiantes con libros, tareas, anuncios, fotos y museos virtuales.">
+<title>Hemeroteca de la I.E. SAN JOSÉ DE PUNO</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%234f46e5'/><text x='32' y='46' font-size='32' font-family='Arial' font-weight='bold' fill='%23ffffff' text-anchor='middle'>H</text></svg>">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<noscript>
+  <div class="noscript">Esta aplicaci&oacute;n necesita JavaScript activado para funcionar.</div>
+</noscript>
+
+<!-- ============================================================
+     PANTALLA DE INICIO DE SESI&Oacute;N &Uacute;NICA
+     ============================================================ -->
+<div class="login-wrap" id="loginScreen">
+  <div class="login-bg" aria-hidden="true"></div>
+
+  <div class="login-card" role="region" aria-labelledby="loginTitulo">
+    <div class="login-brand">
+      <div class="login-logo" aria-hidden="true">&#128218;</div>
+      <h1 id="loginTitulo">Hemeroteca de la I.E. SAN JOSÉ DE PUNO</h1>
+      <p class="login-sub">Tu biblioteca y aula digital</p>
+    </div>
+
+    <form id="loginForm" class="login-form" autocomplete="on" novalidate>
+      <label class="campo" for="loginUsuario">
+        <span class="campo-label">Usuario</span>
+        <span class="input-wrap">
+          <span class="input-icon" aria-hidden="true">&#128100;</span>
+          <input type="text" id="loginUsuario" name="username" class="input"
+                 placeholder="Escribe tu usuario" autocomplete="username"
+                 spellcheck="false" autocapitalize="none" required>
+        </span>
+      </label>
+
+      <label class="campo" for="loginPassword">
+        <span class="campo-label">Contrase&ntilde;a</span>
+        <span class="input-wrap">
+          <span class="input-icon" aria-hidden="true">&#128273;</span>
+          <input type="password" id="loginPassword" name="password" class="input"
+                 placeholder="Escribe tu contraseña" autocomplete="current-password" required>
+          <button type="button" class="btn-ojo" id="togglePass"
+                  aria-label="Mostrar contraseña" title="Mostrar contraseña">&#128065;</button>
+        </span>
+      </label>
+
+      <p class="login-error" id="loginError" role="alert" aria-live="assertive"></p>
+
+      <button type="submit" class="btn btn-primario btn-bloque btn-grande" id="btnIngresar">
+        Ingresar
+      </button>
+    </form>
+
+    <p class="login-foot">Proyecto educativo &middot; HTML + CSS + JavaScript &middot; sin servidor</p>
+  </div>
+</div>
+
+<!-- ============================================================
+     APLICACI&Oacute;N
+     ============================================================ -->
+<div class="app oculto" id="appScreen">
+
+  <!-- ---------- BARRA LATERAL ---------- -->
+  <aside class="sidebar" id="sidebar" aria-label="Men&uacute; principal">
+    <div class="sidebar-brand">
+      <span class="sidebar-logo" aria-hidden="true">&#128218;</span>
+      <div class="sidebar-titulo">
+        <strong id="marcaNombre">Hemeroteca</strong>
+        <small>de la I.E. SAN JOSÉ DE PUNO</small>
+      </div>
+      <button type="button" class="btn-icono sidebar-cerrar" id="cerrarSidebar" aria-label="Cerrar men&uacute;">&#10005;</button>
+    </div>
+
+    <div class="sidebar-rol">
+      <span class="avatar" id="avatarInicial" aria-hidden="true">D</span>
+      <div class="sidebar-rol-txt">
+        <strong id="nombreSesion">Docente</strong>
+        <small id="usuarioSesion">admin</small>
+      </div>
+    </div>
+
+    <nav class="nav" id="navPrincipal">
+      <button type="button" class="nav-item activo" data-seccion="inicio">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 13h6V4H4v9Zm0 7h6v-5H4v5Zm10 0h6V11h-6v9Zm0-16v5h6V4h-6Z"/></svg>
+        <span>Inicio</span>
+      </button>
+      <button type="button" class="nav-item" data-seccion="libros">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 2h11a3 3 0 0 1 3 3v17l-4.5-2.5L12 22l-3.5-2.5L4 22V5a3 3 0 0 1 3-3Zm0 2a1 1 0 0 0-1 1v14.9l2.5-1.4a1 1 0 0 1 1 0L12 20.9l3.5-2.4a1 1 0 0 1 1 0l2.5 1.4V5a1 1 0 0 0-1-1H6Z"/></svg>
+        <span>Libros</span>
+        <em class="nav-badge" id="badgeLibros">0</em>
+      </button>
+      <button type="button" class="nav-item" data-seccion="tareas">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 2h6a2 2 0 0 1 2 2h1a2 2 0 0 1 2 2v16H4V6a2 2 0 0 1 2-2h1a2 2 0 0 1 2-2Zm0 2v1h6V4H9Zm-3 5v2h12V9H6Zm0 4v2h12v-2H6Zm0 4v2h8v-2H6Z"/></svg>
+        <span>Tareas</span>
+        <em class="nav-badge" id="badgeTareas">0</em>
+      </button>
+      <button type="button" class="nav-item" data-seccion="anuncios">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10v4a1 1 0 0 0 1 1h2l4 4V5L6 9H4a1 1 0 0 0-1 1Zm16.5 2a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4Zm-2.5-8v2.06A6.5 6.5 0 0 1 17 20.94V23h2V4h-2Z"/></svg>
+        <span>Anuncios</span>
+        <em class="nav-badge nav-badge-alerta" id="badgeAnuncios">0</em>
+      </button>
+      <button type="button" class="nav-item" data-seccion="fotos">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Zm1 13h14l-4.5-6-3.5 4.5L9.5 13 5 17Zm3.5-7a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"/></svg>
+        <span>Fotos</span>
+        <em class="nav-badge" id="badgeFotos">0</em>
+      </button>
+      <button type="button" class="nav-item" data-seccion="museos">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 2 7v2h20V7l-10-5Zm-7 9h2v6H5v-6Zm4.5 0h2v6h-2v-6Zm4 0h2v6h-2v-6Zm4.5 0h2v6H18v-6ZM2 19h20v2H2v-2Z"/></svg>
+        <span>Museos Virtuales</span>
+        <em class="nav-badge" id="badgeMuseos">0</em>
+      </button>
+
+      <hr class="nav-sep">
+
+      <button type="button" class="nav-item solo-docente" data-seccion="ajustes">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m19.4 13-.1-1 .1-1 2-1.6-2-3.4-2.4 1a7 7 0 0 0-1.7-1l-.4-2.6h-4l-.4 2.7a7 7 0 0 0-1.7 1l-2.4-1-2 3.4L4.6 11l-.1 1 .1 1-2 1.6 2 3.4 2.4-1a7 7 0 0 0 1.7 1l.4 2.6h4l.4-2.7a7 7 0 0 0 1.7-1l2.4 1 2-3.4-2-1.6ZM12 15.2A3.2 3.2 0 1 1 12 8.8a3.2 3.2 0 0 1 0 6.4Z"/></svg>
+        <span>Ajustes</span>
+      </button>
+    </nav>
+
+    <div class="sidebar-pie">
+      <button type="button" class="btn btn-salir btn-bloque" id="btnCerrarSesion">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h5v-2H5V5h5V3Zm6.6 4.4L14.2 9.8 17.4 13H9v2h8.4l-3.2 3.2L15.6 19.6 22 13.2 15.6 6.8Z"/></svg>
+        Cerrar sesi&oacute;n
+      </button>
+    </div>
+  </aside>
+
+  <div class="sidebar-overlay" id="sidebarOverlay" hidden></div>
+
+  <!-- ---------- CONTENIDO ---------- -->
+  <div class="main">
+    <header class="topbar">
+      <button type="button" class="btn-icono solo-movil" id="abrirSidebar" aria-label="Abrir men&uacute;">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v2H3V6Zm0 5h18v2H3v-2Zm0 5h18v2H3v-2Z"/></svg>
+      </button>
+
+      <div class="topbar-info">
+        <h1 class="topbar-titulo" id="tituloSeccion">Inicio</h1>
+        <p class="topbar-sub" id="subtituloSeccion">Resumen de la hemeroteca</p>
+      </div>
+
+      <div class="topbar-acciones">
+        <div class="buscador" id="buscadorGlobal">
+          <span aria-hidden="true">&#128269;</span>
+          <input type="search" id="inputBuscar" placeholder="Buscar libros, tareas&hellip;" aria-label="Buscar">
+        </div>
+        <button type="button" class="btn-icono" id="btnTema" aria-label="Cambiar tema" title="Cambiar tema">&#127769;</button>
+      </div>
+    </header>
+
+    <main class="content" id="content">
+
+      <!-- ====== INICIO ====== -->
+      <section class="seccion activa" id="sec-inicio">
+        <div class="grid-stats" id="statsGrid"></div>
+
+        <div class="dos-col">
+          <div class="panel">
+            <div class="panel-head">
+              <h2>Annuncios recientes</h2>
+              <button type="button" class="btn btn-sm btn-soft" data-ir="anuncios">Ver todos</button>
+            </div>
+            <div id="inicioAnuncios" class="lista-anuncios"></div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head">
+              <h2>Accesos r&aacute;pidos</h2>
+            </div>
+            <div class="tiles">
+              <button type="button" class="tile" data-ir="libros"><span>&#128214;</span>Libros</button>
+              <button type="button" class="tile" data-ir="tareas"><span>&#128203;</span>Tareas</button>
+              <button type="button" class="tile" data-ir="fotos"><span>&#128247;</span>Fotos</button>
+              <button type="button" class="tile" data-ir="museos"><span>&#127963;</span>Museos</button>
+            </div>
+            <div class="almacen-mini">
+              <div class="almacen-mini-head">
+                <strong>Almacenamiento</strong>
+                <span id="almacenMiniTxt">Calculando&hellip;</span>
+              </div>
+              <div class="barra"><span id="almacenMiniBarra" style="width:0%"></span></div>
+              <small id="almacenMiniNota">Los archivos se guardan en este navegador.</small>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ====== LIBROS ====== -->
+      <section class="seccion" id="sec-libros">
+        <div class="panel panel-subir solo-docente">
+          <div class="panel-head">
+            <h2>Subir libro</h2>
+            <span class="chip">Word &middot; PDF &middot; m&aacute;x. <span id="chipMaxLibro">1 GB</span></span>
+          </div>
+          <form class="form-rejilla" id="formLibro">
+            <div class="drop" id="dropLibro" tabindex="0" role="button" aria-label="Seleccionar archivo del libro">
+              <input type="file" id="inputLibro" accept=".doc,.docx,.pdf,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" hidden>
+              <span class="drop-icono" aria-hidden="true">&#128228;</span>
+              <strong id="dropLibroTxt">Arrastra el archivo aqu&iacute; o haz clic para elegir</strong>
+              <small id="dropLibroInfo">.doc &middot; .docx &middot; .pdf</small>
+            </div>
+            <div class="form-cols">
+              <label class="campo" for="libroTitulo">
+                <span class="campo-label">T&iacute;tulo del libro <b class="req">*</b></span>
+                <input type="text" id="libroTitulo" class="input" placeholder="Ej. Historia del siglo XX" maxlength="140" required>
+              </label>
+              <label class="campo" for="libroAutor">
+                <span class="campo-label">Autor</span>
+                <input type="text" id="libroAutor" class="input" placeholder="Ej. Juan P&eacute;rez" maxlength="120">
+              </label>
+              <label class="campo campo-ancho" for="libroCategoria">
+                <span class="campo-label">&Aacute;rea / Materia</span>
+                <input type="text" id="libroCategoria" class="input" placeholder="Ej. Historia, Matem&aacute;ticas&hellip;" maxlength="80">
+              </label>
+              <label class="campo campo-ancho" for="libroDesc">
+                <span class="campo-label">Descripci&oacute;n</span>
+                <textarea id="libroDesc" class="input" rows="2" maxlength="500" placeholder="Breve sinopsis del material"></textarea>
+              </label>
+            </div>
+            <div class="form-acciones">
+              <button type="reset" class="btn btn-soft" id="btnLimpiarLibro">Limpiar</button>
+              <button type="submit" class="btn btn-primario" id="btnGuardarLibro">Guardar libro</button>
+            </div>
+          </form>
+          <div class="aviso-edicion oculto" id="avisoEdicionLibro">
+            Est&aacute;s <b>editando</b> un libro. <button type="button" class="btn-link" id="btnCancelarEdicion">Cancelar edici&oacute;n</button>
+          </div>
+        </div>
+
+        <div class="barra-filtros">
+          <div class="filtros" id="filtrosCategoria"></div>
+          <input type="search" class="input input-busqueda" id="buscarLibro" placeholder="Buscar por t&iacute;tulo, autor o categor&iacute;a&hellip;">
+        </div>
+
+        <div class="grid" id="gridLibros"></div>
+      </section>
+
+      <!-- ====== TAREAS ====== -->
+      <section class="seccion" id="sec-tareas">
+        <div class="panel panel-subir">
+          <div class="panel-head">
+            <h2 id="tituloSubirTarea">Subir tarea</h2>
+            <span class="chip">Foto &middot; Word &middot; PDF &middot; m&aacute;x. <span id="chipMaxTarea">1 GB</span></span>
+          </div>
+          <form class="form-rejilla" id="formTarea">
+            <div class="drop" id="dropTarea" tabindex="0" role="button" aria-label="Seleccionar archivo de la tarea">
+              <input type="file" id="inputTarea"
+                     accept="image/*,.doc,.docx,.pdf,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" hidden>
+              <span class="drop-icono" aria-hidden="true">&#128206;</span>
+              <strong id="dropTareaTxt">Arrastra tu tarea aqu&iacute; o haz clic para elegir</strong>
+              <small id="dropTareaInfo">.jpg &middot; .png &middot; .doc &middot; .docx &middot; .pdf</small>
+            </div>
+            <div class="form-cols">
+              <label class="campo solo-estudiante" for="tareaAutor">
+                <span class="campo-label">Tu nombre</span>
+                <input type="text" id="tareaAutor" class="input" placeholder="Ej. Ana Pérez" maxlength="60">
+                <small class="campo-ayuda">Aparece junto a tu entrega para que el docente la identifique.</small>
+              </label>
+              <label class="campo campo-ancho" for="tareaTitulo">
+                <span class="campo-label">T&iacute;tulo <b class="req">*</b></span>
+                <input type="text" id="tareaTitulo" class="input" placeholder="Ej. Ensayo sobre el Romanticismo" maxlength="140" required>
+              </label>
+              <label class="campo" for="tareaMateria">
+                <span class="campo-label">Materia</span>
+                <input type="text" id="tareaMateria" class="input" placeholder="Ej. Lenguaje" maxlength="80">
+              </label>
+              <label class="campo campo-ancho" for="tareaDesc">
+                <span class="campo-label">Comentario</span>
+                <textarea id="tareaDesc" class="input" rows="2" maxlength="500" placeholder="Nota para el docente (opcional)"></textarea>
+              </label>
+              <div class="campo campo-ancho solo-docente">
+                <span class="campo-label">&Aacute;mbito</span>
+                <div class="radios">
+                  <label class="radio"><input type="radio" name="tareaAmbito" value="actividad" checked><span>Actividad para el curso</span></label>
+                  <label class="radio"><input type="radio" name="tareaAmbito" value="entrega"><span>Entrega de un estudiante</span></label>
+                </div>
+              </div>
+            </div>
+            <div class="form-acciones">
+              <button type="reset" class="btn btn-soft">Limpiar</button>
+              <button type="submit" class="btn btn-primario" id="btnGuardarTarea">Guardar tarea</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="barra-filtros">
+          <div class="filtros" id="filtrosTarea"></div>
+          <input type="search" class="input input-busqueda" id="buscarTarea" placeholder="Buscar tareas&hellip;">
+        </div>
+
+        <div class="grid" id="gridTareas"></div>
+      </section>
+
+      <!-- ====== ANUNCIOS ====== -->
+      <section class="seccion" id="sec-anuncios">
+        <div class="panel panel-subir solo-docente">
+          <div class="panel-head">
+            <h2>Nuevo anuncio</h2>
+          </div>
+          <form id="formAviso" class="form-anuncio">
+            <label class="campo" for="avisoTitulo">
+              <span class="campo-label">T&iacute;tulo <b class="req">*</b></span>
+              <input type="text" id="avisoTitulo" class="input" placeholder="Ej. Entrega de notas del primer bimestre" maxlength="140" required>
+            </label>
+            <label class="campo" for="avisoCuerpo">
+              <span class="campo-label">Mensaje <b class="req">*</b></span>
+              <textarea id="avisoCuerpo" class="input" rows="4" maxlength="1200" placeholder="Escribe el mensaje para los estudiantes" required></textarea>
+            </label>
+            <div class="form-acciones">
+              <button type="reset" class="btn btn-soft">Limpiar</button>
+              <button type="submit" class="btn btn-primario" id="btnGuardarAviso">Publicar anuncio</button>
+            </div>
+          </form>
+        </div>
+        <div class="lista-anuncios" id="listaAvisos"></div>
+      </section>
+
+      <!-- ====== FOTOS ====== -->
+      <section class="seccion" id="sec-fotos">
+        <div class="panel panel-subir solo-docente">
+          <div class="panel-head">
+            <h2>Subir fotos</h2>
+            <span class="chip">JPG &middot; PNG &middot; GIF &middot; WEBP &middot; m&aacute;x. <span id="chipMaxFoto">1 GB</span></span>
+          </div>
+          <form id="formFoto">
+            <div class="drop drop-multi" id="dropFoto" tabindex="0" role="button" aria-label="Seleccionar fotos">
+              <input type="file" id="inputFoto" accept="image/*" multiple hidden>
+              <span class="drop-icono" aria-hidden="true">&#128247;</span>
+              <strong id="dropFotoTxt">Arrastra las im&aacute;genes o haz clic para elegir</strong>
+              <small>Puedes seleccionar varias im&aacute;genes a la vez</small>
+            </div>
+            <label class="campo" for="fotoTitulo">
+              <span class="campo-label">T&iacute;tulo o album (opcional)</span>
+              <input type="text" id="fotoTitulo" class="input" placeholder="Ej. Visita al museo - 12 de marzo" maxlength="140">
+            </label>
+            <div class="form-acciones">
+              <button type="reset" class="btn btn-soft">Limpiar</button>
+              <button type="submit" class="btn btn-primario" id="btnGuardarFotos">Subir fotos</button>
+            </div>
+          </form>
+          <p class="nota-form" id="notaFotos"></p>
+        </div>
+
+        <div class="barra-filtros">
+          <input type="search" class="input input-busqueda" id="buscarFoto" placeholder="Buscar fotos&hellip;">
+        </div>
+
+        <div class="grid grid-fotos" id="gridFotos"></div>
+      </section>
+
+      <!-- ====== MUSEOS VIRTUALES ====== -->
+      <section class="seccion" id="sec-museos">
+        <div class="panel panel-subir solo-docente">
+          <div class="panel-head">
+            <h2>Agregar museo virtual</h2>
+            <span class="chip">Enlace URL</span>
+          </div>
+          <form id="formMuseo" class="form-rejilla">
+            <div class="form-cols">
+              <label class="campo" for="museoTitulo">
+                <span class="campo-label">Nombre del museo <b class="req">*</b></span>
+                <input type="text" id="museoTitulo" class="input" placeholder="Ej. Museo del Prado" maxlength="140" required>
+              </label>
+              <label class="campo" for="museoUrl">
+                <span class="campo-label">Enlace (URL) <b class="req">*</b></span>
+                <input type="url" id="museoUrl" class="input" placeholder="https://www.museodelprado.es" maxlength="500" required>
+              </label>
+              <label class="campo" for="museoImg">
+                <span class="campo-label">Imagen de portada (URL, opcional)</span>
+                <input type="url" id="museoImg" class="input" placeholder="https://.../portada.jpg" maxlength="500">
+              </label>
+              <label class="campo campo-ancho" for="museoDesc">
+                <span class="campo-label">Descripci&oacute;n</span>
+                <textarea id="museoDesc" class="input" rows="2" maxlength="400" placeholder="Qu&eacute; se podr&aacute; visitar en este recorrido virtual"></textarea>
+              </label>
+            </div>
+            <div class="form-acciones">
+              <button type="reset" class="btn btn-soft">Limpiar</button>
+              <button type="submit" class="btn btn-primario" id="btnGuardarMuseo">Agregar enlace</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="barra-filtros">
+          <div class="filtros" id="filtrosMuseo"></div>
+          <input type="search" class="input input-busqueda" id="buscarMuseo" placeholder="Buscar museos&hellip;">
+        </div>
+
+        <div class="grid grid-museos" id="gridMuseos"></div>
+      </section>
+
+      <!-- ====== AJUSTES (solo docente) ====== -->
+      <section class="seccion solo-docente" id="sec-ajustes">
+        <div class="dos-col">
+          <div class="panel">
+            <div class="panel-head"><h2>Identidad del sitio</h2></div>
+            <form id="formConfig" class="form-cols">
+              <label class="campo" for="cfgNombre">
+                <span class="campo-label">Nombre de la instituci&oacute;n</span>
+                <input type="text" id="cfgNombre" class="input" maxlength="60" placeholder="Hemeroteca">
+              </label>
+              <label class="campo" for="cfgCurso">
+                <span class="campo-label">Curso / Nivel</span>
+                <input type="text" id="cfgCurso" class="input" maxlength="60" placeholder="Ej. 4to de secundaria">
+              </label>
+              <label class="campo campo-ancho" for="cfgLimite">
+                <span class="campo-label">L&iacute;mite m&aacute;ximo por archivo</span>
+                <select id="cfgLimite" class="input">
+                  <option value="104857600">100 MB</option>
+                  <option value="524288000">500 MB</option>
+                  <option value="1073741824">1 GB (por defecto)</option>
+                  <option value="2147483648">2 GB</option>
+                </select>
+                <small class="campo-ayuda">L&iacute;mite l&oacute;gico de la aplicaci&oacute;n. El navegador puede imponer uno menor.</small>
+              </label>
+              <div class="campo campo-ancho">
+                <span class="campo-label">Permisos de estudiantes</span>
+                <label class="switch">
+                  <input type="checkbox" id="cfgBorrarTarea">
+                  <span class="switch-track" aria-hidden="true"></span>
+                  <span>Permitir que un estudiante borre <b>sus propias</b> tareas</span>
+                </label>
+                <label class="switch">
+                  <input type="checkbox" id="cfgVerTodas">
+                  <span class="switch-track" aria-hidden="true"></span>
+                  <span>Permitir ver las tareas de todos los compa&ntilde;eros</span>
+                </label>
+                <label class="switch">
+                  <input type="checkbox" id="cfgVerAnuncios">
+                  <span class="switch-track" aria-hidden="true"></span>
+                  <span>Permitir que los estudiantes borren anuncios</span>
+                </label>
+              </div>
+              <div class="form-acciones campo-ancho">
+                <button type="submit" class="btn btn-primario">Guardar ajustes</button>
+              </div>
+            </form>
+          </div>
+
+          <div class="panel">
+            <div class="panel-head"><h2>Almacenamiento y respaldo</h2></div>
+            <div class="almacen">
+              <div class="almacen-head">
+                <strong>Espacio usado</strong><span id="almacenTxt">Calculando&hellip;</span>
+              </div>
+              <div class="barra"><span id="almacenBarra" style="width:0%"></span></div>
+              <small id="almacenNota" class="campo-ayuda">&nbsp;</small>
+            </div>
+            <div class="acciones-lista">
+              <button type="button" class="btn btn-soft btn-bloque" id="btnPersistente">Solicitar almacenamiento permanente</button>
+              <button type="button" class="btn btn-soft btn-bloque" id="btnExportarMeta">Exportar metadatos (JSON)</button>
+              <button type="button" class="btn btn-soft btn-bloque" id="btnExportarTodo">Exportar copia completa (con archivos)</button>
+              <button type="button" class="btn btn-soft btn-bloque" id="btnImportar">Importar copia de seguridad</button>
+              <input type="file" id="inputImportar" accept="application/json,.json" hidden>
+              <button type="button" class="btn btn-peligro btn-bloque" id="btnBorrarTodo">Borrar todos los datos</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head"><h2>C&oacute;mo funciona el almacenamiento</h2></div>
+          <div class="info-grid">
+            <div class="info-card">
+              <h3>&#128190; Metadatos en localStorage</h3>
+              <p>Las listas de libros, tareas, anuncios, fotos y museos (t&iacute;tulos, fechas, autores) se guardan en <code>localStorage</code> con las claves <code>hemeroteca_*</code>. Son r&aacute;pidas y persisten al recargar.</p>
+            </div>
+            <div class="info-card">
+              <h3>&#128451; Archivos en IndexedDB</h3>
+              <p>Los archivos binarios (Word, PDF, im&aacute;genes) se guardan en <code>IndexedDB</code>, que admite hasta <b>1 GB por archivo</b> mucho mejor que localStorage (limitado a ~5 MB). Los nombres de archivo apuntan al registro correspondiente en la base de archivos.</p>
+            </div>
+            <div class="info-card">
+              <h3>&#128190; Todo en este navegador</h3>
+              <p>Los datos son locales al dispositivo y navegador donde se usan. En otro equipo u otro navegador la hemeroteca estar&aacute; vac&iacute;a. Usa <b>Exportar copia completa</b> para respaldar y <b>Importar</b> para restoring en otro equipo.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="foot">
+      <span id="footTexto">Hemeroteca de la I.E. SAN JOSÉ DE PUNO</span>
+      <span class="foot-sep">&middot;</span>
+      <span>Datos guardados localmente en este navegador</span>
+    </footer>
+  </div>
+</div>
+
+<!-- ============================================================
+     MODAL: VISOR DE ARCHIVOS
+     ============================================================ -->
+<div class="modal" id="modalVisor" hidden role="dialog" aria-modal="true" aria-labelledby="visorTitulo">
+  <div class="modal-caja modal-grande">
+    <div class="modal-head">
+      <div class="modal-head-txt">
+        <h3 id="visorTitulo">Visor</h3>
+        <p id="visorSub">&nbsp;</p>
+      </div>
+      <div class="modal-head-acc">
+        <div class="zoom" id="zoomControles" hidden>
+          <button type="button" class="btn-icono" id="zoomMenos" aria-label="Alejar">&minus;</button>
+          <span id="zoomNivel">100%</span>
+          <button type="button" class="btn-icono" id="zoomMas" aria-label="Acercar">+</button>
+          <button type="button" class="btn-icono" id="zoomReset" aria-label="Restablecer">&#8634;</button>
+        </div>
+        <button type="button" class="btn-icono" id="visorDescargar" title="Descargar" aria-label="Descargar">&#11015;</button>
+        <button type="button" class="btn-icono" id="visorCerrar" title="Cerrar" aria-label="Cerrar">&#10005;</button>
+      </div>
+    </div>
+    <div class="modal-body visor-body" id="visorBody">
+      <div class="cargando"><span class="spinner"></span><p>Cargando archivo&hellip;</p></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     MODAL: VISOR DE MUSEOS (iframe)
+     ============================================================ -->
+<div class="modal" id="modalMuseo" hidden role="dialog" aria-modal="true" aria-labelledby="museoModalTitulo">
+  <div class="modal-caja modal-grande">
+    <div class="modal-head">
+      <div class="modal-head-txt">
+        <h3 id="museoModalTitulo">Museo virtual</h3>
+        <p id="museoModalSub">&nbsp;</p>
+      </div>
+      <div class="modal-head-acc">
+        <a class="btn btn-sm btn-soft" id="museoModalAbrir" href="#" target="_blank" rel="noopener noreferrer">Abrir en pestana nueva</a>
+        <button type="button" class="btn-icono" id="museoModalCerrar" aria-label="Cerrar">&#10005;</button>
+      </div>
+    </div>
+    <div class="modal-body visor-body">
+      <iframe id="museoIframe" class="museo-iframe" title="Visor del museo virtual"
+              sandbox="allow-scripts allow-popups allow-popups-to-escape-sandbox allow-forms"
+              referrerpolicy="no-referrer"></iframe>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     MODAL: CONFIRMACI&Oacute;N
+     ============================================================ -->
+<div class="modal" id="modalConfirmar" hidden role="dialog" aria-modal="true" aria-labelledby="confirmTitulo">
+  <div class="modal-caja modal-pequena">
+    <div class="modal-body">
+      <div class="confirm-icono" id="confirmIcono">&#9888;</div>
+      <h3 id="confirmTitulo">Confirmar</h3>
+      <p id="confirmTexto">&nbsp;</p>
+    </div>
+    <div class="modal-foot">
+      <button type="button" class="btn btn-soft" id="confirmNo">Cancelar</button>
+      <button type="button" class="btn btn-peligro" id="confirmSi">Confirmar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================
+     MODAL: BARRA DE PROGRESO
+     ============================================================ -->
+<div class="modal" id="modalProgreso" hidden role="dialog" aria-modal="true" aria-label="Procesando">
+  <div class="modal-caja modal-pequena">
+    <div class="modal-body">
+      <h3 id="progresoTitulo">Procesando&hellip;</h3>
+      <div class="barra"><span id="progresoBarra" style="width:0%"></span></div>
+      <p class="progreso-txt" id="progresoTexto">Preparando&hellip;</p>
+    </div>
+  </div>
+</div>
+
+<!-- Notificaciones -->
+<div class="toasts" id="toasts" aria-live="polite" aria-atomic="false"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
