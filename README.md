@@ -1,4 +1,4 @@
-# 📚 Hemeroteca de la I.E. SAN JOSÉ DE PUNO
+# 📚 BIBLIOTECA VIRTUAL DE LA I.E.S. SAN JOSÉ DE PUNO
 
 Proyecto educativo **full‑stack sin backend**: una biblioteca y aula digital completa
 (HTML + CSS + JavaScript puro) que funciona abriéndola en VS Code y publicándola
@@ -11,29 +11,30 @@ Sin frameworks, sin servidor, sin base de datos, sin dependencias externas
 
 ## ✨ Funcionalidades
 
-### 🔐 Acceso único
+### 🔐 Acceso por rol
 
-Las credenciales del sistema están en **`_admin/credenciales.txt`** (archivo local
-para el desarrollador, no enlazado desde el sitio). En el código solo se guardan
-los hashes SHA-256.
+La pantalla de inicio ofrece dos accesos independientes: **DOCENTES** y **ESTUDIANTES**.
+Cada rol valida su propio usuario y contraseña configurados mediante variables de entorno.
+No se guardan credenciales reales en los archivos versionados.
 
-Una sola pantalla de inicio de sesión para todos. Después de ingresar se elige el
-**rol** (docente o estudiante) y la interfaz se adapta.
+### ⚠️ Limitación de seguridad del sitio estático
 
-### 🔒 Seguridad del inicio de sesión
+El proyecto continúa siendo HTML, CSS y JavaScript publicado como sitio estático.
+El archivo de configuración se genera durante la publicación desde variables de entorno,
+pero sus valores llegan al navegador y pueden inspeccionarse. Por ello este login es
+**solo una maqueta funcional de demostración**: no protege datos ni sustituye una
+autenticación de servidor. Para seguridad real se necesita un backend que valide
+credenciales y permisos en cada solicitud.
 
-- Contraseña comparada mediante **hash SHA-256** (`crypto.subtle`), sin texto plano en el JavaScript.
-- **Bloqueo de 60 segundos** tras **5 intentos fallidos** (persiste al recargar).
-- **Token de sesión** en `sessionStorage`; sin token no se abren las páginas internas.
-- Sanitización de las entradas y protección básica contra clic derecho / F12 / Ctrl+Shift+I / Ctrl+U.
-- Estas medidas son **disuasorias**: en frontend puro la seguridad real no existe.
+Se conserva el bloqueo visual de intentos y la sesión local, pero ambos son controles
+del navegador y pueden manipularse.
 
 ### 👨‍🏫 Rol DOCENTE
 
 - **Libros**: subir archivos **Word (.doc / .docx)** y **PDF** de hasta **1 GB** cada uno,
   **editar** los datos (y reemplazar el archivo) y **eliminar**.
 - **Tareas**: publicar actividades para el curso o subir entregas.
-- **Anuncios**: crear comunicados para todo el grupo.
+- **Anuncios por área curricular**: publicar comunicados dentro de la lista independiente de cada área.
 - **Fotos**: subir una o varias imágenes a la vez y eliminarlas.
 - **Museos Virtuales**: agregar enlaces (URL) a museos y recorridos virtuales.
 - **Ajustes**: nombre de la institución, curso, límite de tamaño, permisos y respaldo.
@@ -43,7 +44,7 @@ Una sola pantalla de inicio de sesión para todos. Después de ingresar se elige
 - **Ver y leer** todos los libros (con visor integrado).
 - **Subir sus tareas** en formato **foto, Word o PDF**.
 - **Ver y usar** los museos virtuales.
-- **Ver** los anuncios del docente.
+- **Ver** los anuncios publicados en cada área curricular.
 - ❌ **No puede** editar ni eliminar nada.
 
 > Por defecto el estudiante **no** puede borrar nada. Si lo prefieres, el docente
@@ -68,7 +69,10 @@ hemeroteca-oficial/
 ├── index.html    ← Estructura de la página
 ├── styles.css    ← Estilos, temas claro/oscuro y diseño responsive
 ├── script.js     ← Toda la lógica de la aplicación
-├── _admin/       ← Solo desarrollador (credenciales en texto plano)
+├── auth-config.js ← Generado localmente; ignorado por Git
+├── .env.example  ← Nombres de variables, sin credenciales reales
+├── scripts/      ← Generador de configuración estática
+├── .github/workflows/ ← Validación y publicación en Pages
 └── README.md     ← Este archivo
 ```
 
@@ -89,7 +93,19 @@ hemeroteca-oficial/
 2. Busca **Live Server** (autor *Ritwick Dey*).
 3. Haz clic en **Instalar**.
 
-### 3. Ejecutar
+### 3. Configurar accesos de demostración
+
+1. Copia `.env.example` como `.env`.
+2. Edita `.env` y define los cuatro valores para docente y estudiante.
+3. Con Node.js 22 o superior, ejecuta:
+
+```powershell
+node scripts/generate-auth-config.mjs
+```
+
+El comando genera `auth-config.js` localmente. Ese archivo está excluido de Git.
+
+### 4. Ejecutar
 
 1. Abre `index.html`.
 2. Clic derecho sobre `index.html` → **Open with Live Server**.
@@ -100,7 +116,7 @@ hemeroteca-oficial/
 > Si abres `index.html` con doble clic (`file:///`), algunos navegadores
 > bloquean el almacenamiento local y los datos **no se guardarán**.
 
-### 4. Detener el servidor
+### 5. Detener el servidor
 
 Cierra la pestaña del navegador o pulsa **Ctrl + Shift + P → Live Server: Stop Server**
 en VS Code.
@@ -109,11 +125,21 @@ en VS Code.
 
 ## 🔑 Iniciar sesión
 
-Consulta el usuario y la contraseña en **`_admin/credenciales.txt`** (uso exclusivo
-del desarrollador). Luego selecciona: **Soy docente** o **Soy estudiante**.
+En la pantalla inicial selecciona **DOCENTES** o **ESTUDIANTES** e introduce las
+credenciales correspondientes a ese rol. El cierre de sesión está disponible en
+la barra lateral. Tras cinco intentos fallidos se aplica un bloqueo local de 60 segundos.
 
-> Tras **5 intentos fallidos**, el acceso se bloquea durante **60 segundos**.
-> El bloqueo se guarda en el navegador y se mantiene aunque recargues la página.
+Para la publicación en GitHub Pages configura estos cuatro **Actions Secrets** en
+`Settings → Secrets and variables → Actions`:
+
+- `DOCENTE_USERNAME`
+- `DOCENTE_PASSWORD`
+- `ESTUDIANTE_USERNAME`
+- `ESTUDIANTE_PASSWORD`
+
+El workflow genera `auth-config.js` durante la publicación. **No reutilices contraseñas
+personales**: los valores generados quedan expuestos en el JavaScript público del sitio.
+Utiliza únicamente credenciales ficticias de demostración hasta migrar a un backend.
 
 ---
 
@@ -133,7 +159,7 @@ Desde la terminal, dentro de la carpeta del proyecto:
 ```bash
 git init
 git add .
-git commit -m "Hemeroteca de la I.E. SAN JOSÉ DE PUNO"
+git commit -m "BIBLIOTECA VIRTUAL DE LA I.E.S. SAN JOSÉ DE PUNO"
 git branch -M main
 git remote add origin https://github.com/TU_USUARIO/hemeroteca-oficial.git
 git push -u origin main
@@ -219,24 +245,33 @@ y la importa en el equipo de cada aula.
 
 ### Cambiar usuario y contraseña
 
-Las credenciales en texto plano viven solo en `_admin/credenciales.txt`. El frontend
-compara hashes SHA-256 definidos al inicio de `script.js`:
+Edita las cuatro variables del archivo local `.env` o los cuatro Actions Secrets
+indicados en *Iniciar sesión*. Después, genera nuevamente `auth-config.js` para
+la prueba local o vuelve a ejecutar el workflow de GitHub Pages.
 
-```js
-var USUARIO_OBJETIVO = 'admin';
-var HASH_USUARIO_OBJETIVO = '8c6976...';
-var HASH_PASSWORD_OBJETIVO = 'a5f639...';
-```
+No guardes `.env` ni `auth-config.js` en el repositorio. Los valores de configuración
+incluidos en el sitio publicado son visibles para los visitantes y no constituyen
+credenciales seguras.
 
-Para cambiar la contraseña, calcula su hash SHA-256 y reemplaza
-`HASH_PASSWORD_OBJETIVO`. Puedes usar la consola del navegador:
+### Áreas curriculares
 
-```js
-crypto.subtle.digest('SHA-256', new TextEncoder().encode('NUEVA_CONTRASEÑA'))
-  .then(b => console.log([...new Uint8Array(b)].map(x => x.toString(16).padStart(2, '0')).join('')));
-```
+La sección de áreas contiene exclusivamente estas áreas, cada una con su propio
+formulario de publicación y su propia lista de anuncios:
 
-Recuerda actualizar también `_admin/credenciales.txt`.
+- Área de Desarrollo Personal, Ciudadanía y Cívica
+- Área de Ciencias Sociales
+- Área de Educación Física
+- Área de Arte y Cultura
+- Área de Comunicación
+- Área de Castellano como Segunda Lengua
+- Área de Inglés como Lengua Extranjera
+- Área de Matemática
+- Área de Ciencia y Tecnología
+- Área de Educación para el Trabajo
+- Área de Educación Religiosa
+
+Los anuncios antiguos que no tengan un identificador de área se conservan en los
+datos locales y respaldos, pero no se muestran mezclados en ninguna lista curricular.
 
 ### Cambiar colores
 
@@ -277,13 +312,13 @@ El archivo está organizado en secciones numeradas para que sea fácil de leer:
 | 2–3 | Utilidades y notificaciones (toasts) |
 | 4–5 | Almacenamiento: `localStorage` e `IndexedDB` |
 | 6–7 | Estado de la aplicación y persistencia |
-| 8 | Pantalla de inicio de sesión |
+| 8 | Inicio de sesión de demostración con accesos independientes por rol |
 | 9–10 | Navegación y temas |
 | 11 | Zonas de arrastrar y soltar |
 | 12 | Modales y barra de progreso |
 | **13** | **Lector ZIP + conversor DOCX a HTML (sin dependencias)** |
 | 14 | Visor de archivos (PDF, imágenes, Word) |
-| 15–22 | Renderizado de cada sección |
+| 15–22 | Renderizado de cada sección y anuncios separados por área curricular |
 | 23 | Renderizado general |
 | 24–29 | Acciones (libros, tareas, anuncios, fotos, museos, ajustes) |
 | 30 | Atajos de teclado y eventos globales |
@@ -303,8 +338,7 @@ Sí, pero **solo en el mismo navegador**. Como no hay servidor, cada equipo tien
 propia copia. Usa *Exportar / Importar* para repartir el material.
 
 **¿Puedo cambiar las credenciales?**
-Sí. Sustituye los hashes SHA-256 al inicio de `script.js` (ver *Personalización*)
-y actualiza `_admin/credenciales.txt`. No se borra ningún dato de la hemeroteca.
+Sí. Cambia las variables `DOCENTE_USERNAME`, `DOCENTE_PASSWORD`, `ESTUDIANTE_USERNAME` y `ESTUDIANTE_PASSWORD` en `.env` o en GitHub Actions Secrets y vuelve a generar la configuración. Recuerda que es solo una demostración estática.
 
 **¿Por qué no se guardan mis datos al abrir el archivo con doble clic?**
 Porque en `file:///` algunos navegadores bloquean el almacenamiento. Usa **Live Server**
