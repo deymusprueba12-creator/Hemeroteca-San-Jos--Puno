@@ -1,5 +1,5 @@
 /* =====================================================================
-   HEMEROTECA DE LA I.E. SAN JOSÉ DE PUNO — Lógica de la aplicación
+   BIBLIOTECA VIRTUAL DE LA I.E.S. SAN JOSÉ DE PUNO — Lógica de la aplicación
    HTML + CSS + JavaScript puro. Sin frameworks, sin backend, sin CDN.
 
    Almacenamiento:
