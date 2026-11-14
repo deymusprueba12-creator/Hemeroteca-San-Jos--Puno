@@ -1,0 +1,26 @@
+{
+  "name": "hemeroteca-san-jose",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Backend API for Hemeroteca San José de Puno",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node backend/src/server.js",
+    "dev": "node --watch backend/src/server.js",
+    "test": "node --test",
+    "check": "node --check backend/src/server.js && node --check backend/src/app.js && node --check backend/src/config/env.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^5.1.0",
+    "helmet": "^8.1.0",
+    "pg": "^8.16.3",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "supertest": "^7.1.4"
+  }
+}
