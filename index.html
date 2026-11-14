@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#4f46e5">
-<meta name="description" content="Hemeroteca de la I.E. SAN JOSÉ DE PUNO: biblioteca digital para docentes y estudiantes con libros, tareas, anuncios, fotos y museos virtuales.">
-<title>Hemeroteca de la I.E. SAN JOSÉ DE PUNO</title>
+<meta name="description" content="BIBLIOTECA VIRTUAL DE LA I.E.S. SAN JOSÉ DE PUNO: biblioteca digital para docentes y estudiantes.">
+<title>BIBLIOTECA VIRTUAL DE LA I.E.S. SAN JOSÉ DE PUNO</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%234f46e5'/><text x='32' y='46' font-size='32' font-family='Arial' font-weight='bold' fill='%23ffffff' text-anchor='middle'>H</text></svg>">
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -24,11 +24,18 @@
   <div class="login-card" role="region" aria-labelledby="loginTitulo">
     <div class="login-brand">
       <div class="login-logo" aria-hidden="true">&#128218;</div>
-      <h1 id="loginTitulo">Hemeroteca de la I.E. SAN JOSÉ DE PUNO</h1>
+      <h1 id="loginTitulo">BIBLIOTECA VIRTUAL DE LA I.E.S. SAN JOSÉ DE PUNO</h1>
       <p class="login-sub">Tu biblioteca y aula digital</p>
     </div>
 
     <form id="loginForm" class="login-form" autocomplete="on" novalidate>
+      <label class="campo" for="loginRol">
+        <span class="campo-label">Tipo de acceso</span>
+        <select id="loginRol" name="role" class="input" required>
+          <option value="docente">DOCENTES</option>
+          <option value="estudiante">ESTUDIANTES</option>
+        </select>
+      </label>
       <label class="campo" for="loginUsuario">
         <span class="campo-label">Usuario</span>
         <span class="input-wrap">
@@ -71,8 +78,8 @@
     <div class="sidebar-brand">
       <span class="sidebar-logo" aria-hidden="true">&#128218;</span>
       <div class="sidebar-titulo">
-        <strong id="marcaNombre">Hemeroteca</strong>
-        <small>de la I.E. SAN JOSÉ DE PUNO</small>
+        <strong id="marcaNombre">BIBLIOTECA VIRTUAL</strong>
+        <small>de la I.E.S. SAN JOSÉ DE PUNO</small>
       </div>
       <button type="button" class="btn-icono sidebar-cerrar" id="cerrarSidebar" aria-label="Cerrar men&uacute;">&#10005;</button>
     </div>
@@ -102,7 +109,7 @@
       </button>
       <button type="button" class="nav-item" data-seccion="anuncios">
         <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10v4a1 1 0 0 0 1 1h2l4 4V5L6 9H4a1 1 0 0 0-1 1Zm16.5 2a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4Zm-2.5-8v2.06A6.5 6.5 0 0 1 17 20.94V23h2V4h-2Z"/></svg>
-        <span>Anuncios</span>
+        <span>Áreas curriculares</span>
         <em class="nav-badge nav-badge-alerta" id="badgeAnuncios">0</em>
       </button>
       <button type="button" class="nav-item" data-seccion="fotos">
@@ -164,10 +171,10 @@
         <div class="dos-col">
           <div class="panel">
             <div class="panel-head">
-              <h2>Annuncios recientes</h2>
-              <button type="button" class="btn btn-sm btn-soft" data-ir="anuncios">Ver todos</button>
+              <h2>Áreas curriculares</h2>
+              <button type="button" class="btn btn-sm btn-soft" data-ir="anuncios">Ver áreas</button>
             </div>
-            <div id="inicioAnuncios" class="lista-anuncios"></div>
+            <div id="inicioAreas" class="area-accesos"></div>
           </div>
 
           <div class="panel">
@@ -298,28 +305,16 @@
         <div class="grid" id="gridTareas"></div>
       </section>
 
-      <!-- ====== ANUNCIOS ====== -->
+      <!-- ====== ÁREAS CURRICULARES Y ANUNCIOS POR ÁREA ====== -->
       <section class="seccion" id="sec-anuncios">
-        <div class="panel panel-subir solo-docente">
+        <div class="panel">
           <div class="panel-head">
-            <h2>Nuevo anuncio</h2>
+            <h2>Anuncios por área curricular</h2>
+            <span class="chip">Cada área conserva su propia lista</span>
           </div>
-          <form id="formAviso" class="form-anuncio">
-            <label class="campo" for="avisoTitulo">
-              <span class="campo-label">T&iacute;tulo <b class="req">*</b></span>
-              <input type="text" id="avisoTitulo" class="input" placeholder="Ej. Entrega de notas del primer bimestre" maxlength="140" required>
-            </label>
-            <label class="campo" for="avisoCuerpo">
-              <span class="campo-label">Mensaje <b class="req">*</b></span>
-              <textarea id="avisoCuerpo" class="input" rows="4" maxlength="1200" placeholder="Escribe el mensaje para los estudiantes" required></textarea>
-            </label>
-            <div class="form-acciones">
-              <button type="reset" class="btn btn-soft">Limpiar</button>
-              <button type="submit" class="btn btn-primario" id="btnGuardarAviso">Publicar anuncio</button>
-            </div>
-          </form>
+          <p class="nota-form">Los docentes pueden publicar anuncios dentro del área correspondiente. Los estudiantes pueden consultar sus comunicados.</p>
         </div>
-        <div class="lista-anuncios" id="listaAvisos"></div>
+        <div id="areasCurriculares" class="areas-grid"></div>
       </section>
 
       <!-- ====== FOTOS ====== -->
@@ -486,7 +481,7 @@
     </main>
 
     <footer class="foot">
-      <span id="footTexto">Hemeroteca de la I.E. SAN JOSÉ DE PUNO</span>
+      <span id="footTexto">BIBLIOTECA VIRTUAL DE LA I.E.S. SAN JOSÉ DE PUNO</span>
       <span class="foot-sep">&middot;</span>
       <span>Datos guardados localmente en este navegador</span>
     </footer>
@@ -576,6 +571,7 @@
 <!-- Notificaciones -->
 <div class="toasts" id="toasts" aria-live="polite" aria-atomic="false"></div>
 
+<script src="auth-config.js"></script>
 <script src="script.js"></script>
 </body>
 </html>
