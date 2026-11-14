@@ -143,47 +143,34 @@ Utiliza únicamente credenciales ficticias de demostración hasta migrar a un ba
 
 ---
 
-## 🌐 Publicar en GitHub Pages (gratis)
+## 🌐 Publicar en Vercel
 
-### Paso 1 — Crear el repositorio
+### Paso 1 — Configurar el proyecto
 
-1. Ve a [github.com](https://github.com) y haz clic en **+ → New repository**.
-2. Nombre sugerido: `hemeroteca-oficial`.
-3. Marca **Public** (obligatorio para Pages gratuito).
-4. Clic en **Create repository**.
+El repositorio ya está conectado a Vercel. En el panel del proyecto abre
+**Settings → Environment Variables** y crea estas cuatro variables para los entornos
+Production y Preview:
 
-### Paso 2 — Subir los archivos
+- `DOCENTE_USERNAME`
+- `DOCENTE_PASSWORD`
+- `ESTUDIANTE_USERNAME`
+- `ESTUDIANTE_PASSWORD`
 
-Desde la terminal, dentro de la carpeta del proyecto:
+Usa únicamente credenciales ficticias de demostración. El archivo `vercel.json`
+ejecuta el generador durante el build y publica el sitio estático desde la raíz.
 
-```bash
-git init
-git add .
-git commit -m "BIBLIOTECA VIRTUAL DE LA I.E.S. SAN JOSÉ DE PUNO"
-git branch -M main
-git remote add origin https://github.com/TU_USUARIO/hemeroteca-oficial.git
-git push -u origin main
-```
+### Paso 2 — Publicar cambios
 
-> Si no tienes Git instalado, puedes subir los archivos arrastrándolos a la web de GitHub
-> (botón **Add file → Upload files**).
+Vercel genera una vista previa para cada Pull Request y publica en producción al
+integrar cambios en la rama `main`. Si cambias las variables de entorno, vuelve a
+desplegar el proyecto para que se regenere `auth-config.js`.
 
-### Paso 3 — Activar GitHub Pages
+### Paso 3 — Compartir la dirección
 
-1. En tu repositorio ve a **Settings → Pages**.
-2. En **Build and deployment → Source**, selecciona **GitHub Actions**.
-3. En **Settings → Secrets and variables → Actions**, crea los cuatro secretos indicados en la sección *Iniciar sesión*.
-4. El workflow `Deploy Biblioteca Virtual` publicará el sitio automáticamente después de integrar los cambios en `main`.
+Copia el dominio asignado al proyecto desde el panel de Vercel y compártelo con
+docentes y estudiantes.
 
-### Paso 4 — Obtener tu dirección
-
-Espera 1–2 minutos. GitHub publicará la página en:
-
-```
-https://TU_USUARIO.github.io/hemeroteca-oficial/
-```
-
-¡Eso es todo! Anota esa dirección y compártela con tus estudiantes.
+¡Listo! La aplicación continúa almacenando los datos localmente en cada navegador.
 
 > **Cada dispositivo guarda sus propios datos.** Si el docente sube libros en su
 > computadora, los estudiantes **no** los verán automáticamente (no hay servidor).
