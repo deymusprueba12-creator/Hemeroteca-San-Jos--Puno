@@ -51,7 +51,7 @@ const output = [
   "/* Archivo generado automáticamente. No versionar: contiene credenciales visibles en el navegador. */",
   `window.BIBLIOTECA_AUTH_CONFIG = ${JSON.stringify(config)};`,
   ""
-].join("\\n");
+].join("\n");
 
 writeFileSync(new URL("../auth-config.js", import.meta.url), output, {
   encoding: "utf8",
