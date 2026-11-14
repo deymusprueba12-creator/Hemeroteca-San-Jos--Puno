@@ -1,11 +1,11 @@
 # 📚 BIBLIOTECA VIRTUAL DE LA I.E.S. SAN JOSÉ DE PUNO
 
-Proyecto educativo **full‑stack sin backend**: una biblioteca y aula digital completa
-(HTML + CSS + JavaScript puro) que funciona abriéndola en VS Code y publicándola
-gratis en **GitHub Pages**.
+Proyecto educativo de sitio estático: una biblioteca y aula digital construida con
+HTML, CSS y JavaScript puro, publicable en **GitHub Pages**.
 
-Sin frameworks, sin servidor, sin base de datos, sin dependencias externas
-(ni CDN, ni npm, ni build). Solo **3 archivos**.
+No utiliza framework frontend, servidor ni base de datos. Node.js 22 se usa únicamente
+para generar la configuración local de demostración y ejecutar las comprobaciones; la
+interfaz continúa siendo una aplicación estática.
 
 ---
 
