@@ -1,0 +1,12 @@
+# Variables locales y configuración generada (contienen credenciales de demostración)
+.env
+auth-config.js
+
+# Herramientas y archivos temporales
+node_modules/
+coverage/
+*.log
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
