@@ -25,34 +25,41 @@ function loadLocalEnv() {
 
 loadLocalEnv();
 
-function required(name) {
-  const value = process.env[name];
-  if (typeof value !== "string" || value.length === 0) {
-    throw new Error(`Falta la variable requerida: ${name}`);
-  }
-  return value;
-}
+const requiredNames = [
+  "DOCENTE_USERNAME",
+  "DOCENTE_PASSWORD",
+  "ESTUDIANTE_USERNAME",
+  "ESTUDIANTE_PASSWORD"
+];
+const missing = requiredNames.filter((name) => !process.env[name]);
 
-const config = {
-  docente: {
-    username: required("DOCENTE_USERNAME"),
-    password: required("DOCENTE_PASSWORD")
-  },
-  estudiante: {
-    username: required("ESTUDIANTE_USERNAME"),
-    password: required("ESTUDIANTE_PASSWORD")
-  }
-};
+let config = null;
+if (missing.length === 0) {
+  config = {
+    docente: {
+      username: process.env.DOCENTE_USERNAME,
+      password: process.env.DOCENTE_PASSWORD
+    },
+    estudiante: {
+      username: process.env.ESTUDIANTE_USERNAME,
+      password: process.env.ESTUDIANTE_PASSWORD
+    }
+  };
+}
 
 const output = [
   "/* Archivo generado automáticamente. No versionar: contiene credenciales visibles en el navegador. */",
-  `window.BIBLIOTECA_AUTH_CONFIG = Object.freeze(${JSON.stringify(config)});`,
+  `window.BIBLIOTECA_AUTH_CONFIG = ${JSON.stringify(config)};`,
   ""
-].join("\n");
+].join("\\n");
 
 writeFileSync(new URL("../auth-config.js", import.meta.url), output, {
   encoding: "utf8",
   mode: 0o600
 });
 
-console.log("auth-config.js generado. Recuerda: esta configuración estática NO es seguridad real.");
+if (missing.length) {
+  console.warn(`auth-config.js generado sin accesos: faltan ${missing.join(", ")}. El login permanecerá deshabilitado hasta configurar las variables.`);
+} else {
+  console.log("auth-config.js generado. Recuerda: esta configuración estática NO es seguridad real.");
+}
