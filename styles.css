@@ -526,6 +526,21 @@ select.input { cursor: pointer; }
 .anuncio-titulo { font-size: 1rem; font-weight: 800; letter-spacing: -.2px; }
 .anuncio-cuerpo { font-size: .89rem; color: var(--c-texto-suave); white-space: pre-wrap; word-break: break-word; }
 .anuncio-meta { display: flex; align-items: center; gap: 9px; margin-top: 11px; font-size: .76rem; color: var(--c-texto-tenue); flex-wrap: wrap; }
+.anuncio { border-left-color: var(--area-color, var(--c-alerta)); }
+.login-form select.input { cursor: pointer; }
+.areas-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 390px), 1fr)); gap: 16px; margin-top: 16px; }
+.area-card { min-width: 0; padding: 18px; border: 1px solid var(--c-borde); border-top: 4px solid var(--area-color); border-radius: var(--radio); background: var(--c-superficie); box-shadow: var(--sombra-sm); }
+.area-card-head { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 14px; }
+.area-card-head h3 { font-size: .98rem; line-height: 1.4; font-weight: 800; color: var(--c-texto); }
+.area-punto { width: 11px; height: 11px; margin-top: 5px; flex: none; border-radius: 50%; background: var(--area-color); }
+.area-form { padding: 14px; margin-bottom: 16px; border: 1px solid var(--c-borde); border-radius: var(--radio-sm); background: var(--c-superficie-2); }
+.area-form .campo + .campo { margin-top: 10px; }
+.area-form .form-acciones { justify-content: flex-start; margin-top: 10px; }
+.area-vacia { padding: 12px 2px; color: var(--c-texto-tenue); font-size: .85rem; }
+.area-accesos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.area-acceso { display: flex; align-items: flex-start; gap: 8px; padding: 10px; text-align: left; color: var(--c-texto); background: var(--c-superficie-2); border: 1px solid var(--c-borde); border-left: 3px solid var(--area-color); border-radius: var(--radio-sm); cursor: pointer; font-size: .8rem; line-height: 1.35; transition: var(--transicion); }
+.area-acceso:hover { border-color: var(--area-color); transform: translateY(-1px); }
+.area-acceso .area-punto { width: 8px; height: 8px; margin-top: 3px; }
 
 /* ---------- 15. Modales ---------- */
 .modal {
