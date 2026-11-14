@@ -1,0 +1,5 @@
+{
+  "version": 2,
+  "buildCommand": "node scripts/generate-auth-config.mjs",
+  "outputDirectory": "."
+}
