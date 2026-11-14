@@ -1,0 +1,34 @@
+name: Validate static site
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - feat/biblioteca-virtual-roles-areas
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    env:
+      DOCENTE_USERNAME: ci-docente
+      DOCENTE_PASSWORD: ci-demo-docente
+      ESTUDIANTE_USERNAME: ci-estudiante
+      ESTUDIANTE_PASSWORD: ci-demo-estudiante
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Generate temporary demo configuration
+        run: npm run build:config
+      - name: Check JavaScript syntax
+        run: npm run check
+      - name: Run static site tests
+        run: npm test
