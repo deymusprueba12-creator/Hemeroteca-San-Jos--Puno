@@ -171,9 +171,9 @@ git push -u origin main
 ### Paso 3 — Activar GitHub Pages
 
 1. En tu repositorio ve a **Settings → Pages**.
-2. En **Source**, elige **Deploy from a branch**.
-3. En **Branch**, selecciona **main** y la carpeta **/(root)**.
-4. Clic en **Save**.
+2. En **Build and deployment → Source**, selecciona **GitHub Actions**.
+3. En **Settings → Secrets and variables → Actions**, crea los cuatro secretos indicados en la sección *Iniciar sesión*.
+4. El workflow `Deploy Biblioteca Virtual` publicará el sitio automáticamente después de integrar los cambios en `main`.
 
 ### Paso 4 — Obtener tu dirección
 
