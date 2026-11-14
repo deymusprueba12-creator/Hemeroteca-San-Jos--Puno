@@ -1,0 +1,14 @@
+{
+  "name": "biblioteca-virtual-san-jose-puno",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build:config": "node scripts/generate-auth-config.mjs",
+    "check": "node --check script.js && node --check scripts/generate-auth-config.mjs",
+    "test": "node --test"
+  }
+}
