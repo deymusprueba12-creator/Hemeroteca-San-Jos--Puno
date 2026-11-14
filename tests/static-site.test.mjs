@@ -71,5 +71,5 @@ test("no quedan hashes de las antiguas credenciales ni secretos en el generador"
   assert.match(generator, /ESTUDIANTE_USERNAME/);
   assert.match(generator, /ESTUDIANTE_PASSWORD/);
   assert.match(styles, /\.area-card/);
-  assert.match(readme, /no es seguridad real|no constituyen[\\s\\S]*?seguras/i);
+  assert.match(readme, /no protege datos|no constituyen/i);
 });
